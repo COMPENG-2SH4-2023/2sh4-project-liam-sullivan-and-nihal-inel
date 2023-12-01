@@ -7,7 +7,7 @@ Player::Player(GameMechs* thisGMRef)
     myDir = IDLE;
 
     // more actions to be included
-    playerPos.setObjPos(5,5,'*');
+    playerPos.setObjPos(5,5,'@');
 }
 
 
@@ -28,7 +28,7 @@ void Player::getPlayerPos(objPos &returnPos)
     // return the reference to the playerPos arrray list
     returnPos = playerPos;
 }
-
+/*
 int Player::getPlayerXPos()
 {
     return playerPos.x;
@@ -42,7 +42,7 @@ int Player::getPlayerYPos()
 char Player::getPlayerSymbol()
 {
     return playerPos.symbol;
-}
+}*/
 
 void Player::updatePlayerDir()
 {

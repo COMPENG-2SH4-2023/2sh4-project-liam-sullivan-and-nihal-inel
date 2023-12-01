@@ -45,7 +45,7 @@ void Initialize(void)
     MacUILib_init();
     MacUILib_clearScreen();
 
-    myGameMechs = new GameMechs();
+    myGameMechs = new GameMechs(26,13);
     myPlayer = new Player(myGameMechs);
 
     //myGameMechs->setExitFalse();
@@ -72,18 +72,33 @@ void DrawScreen(void)
 {
     MacUILib_clearScreen();    
 
-    //MacUILib_printf("Object: <%d, %d> with %c\n", myPos.x, myPos.y, myPos.symbol);
+    objPos tempPos;
+    myPlayer->getPlayerPos(tempPos); // get the player pos
+
+    MacUILib_printf("Board Size: %dx%d, Player Pos: <%d, %d> + %c\n", 
+                    myGameMechs->getBoardSizeX(),
+                    myGameMechs->getBoardSizeY(),
+                    tempPos.x, tempPos.y, tempPos.symbol);
+    
+
     for (int y = 0; y < myGameMechs->getBoardSizeY(); y++) //draw the game board
     {
         for (int x = 0; x < myGameMechs->getBoardSizeX(); x++)
         {
-            if (y == 0 || y == (myGameMechs->getBoardSizeY() - 1) || x == 0 || x == (myGameMechs->getBoardSizeX() - 1))
+            if (tempPos.x == x && tempPos.y == y)
             {
-                MacUILib_printf("%c", '#');
-            }       
-            else if (myPlayer->getPlayerXPos() == x && myPlayer->getPlayerYPos() == y)
+                MacUILib_printf("%c", tempPos.symbol);
+            }
+            else
             {
-                MacUILib_printf("%c", myPlayer->getPlayerSymbol());
+                if (y == 0 || y == (myGameMechs->getBoardSizeY() - 1) || x == 0 || x == (myGameMechs->getBoardSizeX() - 1))
+                {
+                    MacUILib_printf("%c", '#');
+                }
+                else
+                {
+                    MacUILib_printf(" ");
+                }
             }    
         }
         MacUILib_printf("\n");

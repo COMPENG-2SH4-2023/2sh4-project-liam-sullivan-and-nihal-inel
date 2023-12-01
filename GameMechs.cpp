@@ -2,6 +2,8 @@
 
 GameMechs::GameMechs()
 {
+    input = 0;
+    
     boardSizeX = 30;
     boardSizeY = 15;
 

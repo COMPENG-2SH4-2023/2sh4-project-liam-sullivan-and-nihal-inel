@@ -20,10 +20,10 @@ class Player
         ~Player();
 
         void getPlayerPos(objPos &returnPos); // Upgrade this in iteration 3.
-
+/*
         int getPlayerXPos();
         int getPlayerYPos();
-        char getPlayerSymbol();
+        char getPlayerSymbol();*/
 
         void updatePlayerDir();
         void movePlayer();
