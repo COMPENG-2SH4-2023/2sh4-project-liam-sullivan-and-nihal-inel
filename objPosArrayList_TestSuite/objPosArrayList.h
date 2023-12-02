@@ -8,7 +8,9 @@
 class objPosArrayList
 {
     private:
-        objPos* aList;
+        objPos* aList;  // Pointer to the start of an objPos array list, 
+                        // with the array size specified by sizeArray
+                        // Heap data member
         int sizeList;
         int sizeArray;
 

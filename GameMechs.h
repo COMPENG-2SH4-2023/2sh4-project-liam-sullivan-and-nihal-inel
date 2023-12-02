@@ -2,7 +2,7 @@
 #define GAMEMECHS_H
 
 #include <cstdlib>
-#include <time.h>
+#include <ctime>
 
 #include "objPos.h"
 #include "objPosArrayList.h"
@@ -27,6 +27,8 @@ class GameMechs
         int boardSizeX;
         int boardSizeY;
 
+        objPos foodPos;
+
     public:
         GameMechs();
         GameMechs(int boardX, int boardY);
@@ -44,8 +46,10 @@ class GameMechs
         void setLoseFlag();        
         void setInput(char this_input);
         void clearInput();
-        void incrementScore();     
+        void incrementScore();
 
+        void generateFood(objPos blockOff);
+        void getFoodPos(objPos &returnPos);
 };
 
 #endif

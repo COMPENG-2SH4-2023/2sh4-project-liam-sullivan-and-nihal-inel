@@ -20,6 +20,7 @@ class Player
         ~Player();
 
         void getPlayerPos(objPos &returnPos); // Upgrade this in iteration 3.
+//      objPos getPlayerPos();
 /*
         int getPlayerXPos();
         int getPlayerYPos();
