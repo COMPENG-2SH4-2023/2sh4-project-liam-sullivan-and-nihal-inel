@@ -2,6 +2,7 @@
 #include <ctime>
 #include "MacUILib.h"
 #include "objPos.h"
+#include "objPosArrayList.h"
 #include "Player.h"
 #include "GameMechs.h"
 
@@ -12,8 +13,8 @@ using namespace std;
 GameMechs *myGameMechs;
 Player *myPlayer;
 
-objPos playerPos;
-objPos foodPos;
+//objPos playerPos;
+//objPos foodPos; // may need to move this inside the drawscreen function
 
 
 void Initialize(void);
@@ -54,9 +55,17 @@ void Initialize(void)
     // think about when to generate new food..
     // think about whether u want to set up a debug key to call the food generation routine for verification
     // remember, generateFood() requires player reference. you will need to provide it AFTER object is instantiated
-    
-    myPlayer->getPlayerPos(playerPos);
-    myGameMechs->generateFood(playerPos);
+/*
+    objPos tempPos;
+    myPlayer->getPlayerPos(tempPos); // commented out for now to modify later using objPosArrayList instead of objPos
+    myGameMechs->generateFood(tempPos);
+*/
+
+    // temporarily keep this as a fix for the above commented out code:
+    objPos tempPos(-1, -1, 'o');
+    myGameMechs->generateFood(tempPos);
+
+
 }
 
 void GetInput(void)
@@ -68,7 +77,7 @@ void RunLogic(void)
 {
     myPlayer->updatePlayerDir();
     myPlayer->movePlayer();
-
+/*
     myGameMechs->getFoodPos(foodPos);
 
     if (playerPos.isPosEqual(&foodPos))
@@ -78,7 +87,7 @@ void RunLogic(void)
         myGameMechs->getFoodPos(foodPos);
 
     }
-
+*/
     myGameMechs->clearInput(); // prevents repeatedly processing the input
 }
 
@@ -86,38 +95,55 @@ void DrawScreen(void)
 {
     MacUILib_clearScreen();    
 
-    objPos tempPos;
-    myPlayer->getPlayerPos(tempPos); // get the player pos
+    bool drawn;
+
+    objPosArrayList* playerBody = myPlayer->getPlayerPos();
+    objPos tempBody;
+
+    objPos tempFoodPos;
+    myGameMechs->getFoodPos(tempFoodPos);
 
     for (int y = 0; y < myGameMechs->getBoardSizeY(); y++) //draw the game board
     {
         for (int x = 0; x < myGameMechs->getBoardSizeX(); x++)
         {
-            if (tempPos.x == x && tempPos.y == y)
+            drawn = false;
+
+            // iterata thru every single element in the list
+            for (int i = 0; i < playerBody->getSize(); i++)
             {
-                printf("%c", tempPos.symbol);
+                playerBody->getElement(tempBody, i);
+
+                if (tempBody.x == x && tempBody.y == y)
+                {
+                    MacUILib_printf("%c", tempBody.symbol);
+                    drawn = true;
+                    break;
+                }
             }
-            else if (y == 0 || y == (myGameMechs->getBoardSizeY() - 1) || x == 0 || x == (myGameMechs->getBoardSizeX() - 1))
+
+            if (drawn) continue;
+            // if playerBody was drawn, don't draw anything below.
+
+            if (y == 0 || y == (myGameMechs->getBoardSizeY() - 1) || x == 0 || x == (myGameMechs->getBoardSizeX() - 1)) // draw border
             {
-                printf("%c", '#');
+                MacUILib_printf("%c", '#');
             }
-            else if (x == foodPos.x && y == foodPos.y)
+            else if (x == tempFoodPos.x && y == tempFoodPos.y) // draw food
             {
-                printf("%c", foodPos.symbol);
+                MacUILib_printf("%c", tempFoodPos.symbol);
             }
             else
             {
-                printf(" ");
+                MacUILib_printf(" ");
             }
         }
-        printf("\n");
+        MacUILib_printf("\n");
     }
 
-    MacUILib_printf("Score: %d, Player Pos: <%d, %d>\n",
-                    myGameMechs->getScore(),
-                    tempPos.x, tempPos.y);
+    MacUILib_printf("Score: %d\n", myGameMechs->getScore());
 
-    MacUILib_printf("Food Pos: <%d, %d>\n", foodPos.x,foodPos.y);
+    MacUILib_printf("Food Pos: <%d, %d>\n", tempFoodPos.x,tempFoodPos.y);
 /*
     MacUILib_printf("Board Size: %dx%d, Player Pos: <%d, %d> + %c\n", 
                     myGameMechs->getBoardSizeX(),

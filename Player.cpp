@@ -8,44 +8,35 @@ Player::Player(GameMechs* thisGMRef)
     myDir = IDLE;
 
     // more actions to be included
-    playerPos.setObjPos(5,5,'@');
+    objPos tempPos;
+    tempPos.setObjPos(mainGameMechsRef->getBoardSizeX()/2,
+                      mainGameMechsRef->getBoardSizeY()/2, '*');
+    //objPos tempPos(mainGameMechsRef->getBoardSizeX()/2, mainGameMechsRef->getBoardSizeY()/2, '@'); // can also be written like this
+
+    playerPosList = new objPosArrayList();
+    playerPosList->insertHead(tempPos);
+
+    // for debugging purpose - insert another 4 segments
+    playerPosList->insertHead(tempPos);
+    playerPosList->insertHead(tempPos);
+    playerPosList->insertHead(tempPos);
+    playerPosList->insertHead(tempPos);
+
 }
 
 
 Player::~Player()
-{/*
+{
     // delete any heap members here
-    if (*mainGameMechsRef != nullptr)
-    {
-        delete *mainGameMechsRef;
-
-        // Set mainGameMechsRef to nullptr to avoid double deletion
-        *mainGameMechsRef = nullptr;
-    }*/
+    delete playerPosList;
 }
 
-void Player::getPlayerPos(objPos &returnPos)
+objPosArrayList* Player::getPlayerPos()
 //objPos Player::getPlayerPos()
 {
     // return the reference to the playerPos arrray list
-    returnPos =  playerPos;
+    return  playerPosList;
 }
-
-/*
-int Player::getPlayerXPos()
-{
-    return playerPos.x;
-}
-
-int Player::getPlayerYPos()
-{
-    return playerPos.y;
-}
-
-char Player::getPlayerSymbol()
-{
-    return playerPos.symbol;
-}*/
 
 void Player::updatePlayerDir()
 {
@@ -102,43 +93,53 @@ void Player::updatePlayerDir()
 void Player::movePlayer()
 {
     // PPA3 Finite State Machine logic
+    objPos currentHead;
+    playerPosList->getHeadElement(currentHead);
+
     switch (myDir) // update the player location by 1 unit in the direction stored in the program
     {
         case UP:
-            playerPos.y--;
+            currentHead.y--;
 
-            if(playerPos.y <= 0)
+            if(currentHead.y <= 0)
             {
-                playerPos.y = mainGameMechsRef->getBoardSizeY() - 2;
+                currentHead.y = mainGameMechsRef->getBoardSizeY() - 2;
             }
             break;
         case DOWN:
-            playerPos.y++;
+            currentHead.y++;
 
-            if (playerPos.y >= mainGameMechsRef->getBoardSizeY()-1)
+            if (currentHead.y >= mainGameMechsRef->getBoardSizeY()-1)
             {
-                playerPos.y = 1;
+                currentHead.y = 1;
             }
             break;
         case LEFT:
-            playerPos.x--;
+            currentHead.x--;
 
-            if(playerPos.x <= 0)
+            if(currentHead.x <= 0)
             {
-                playerPos.x = mainGameMechsRef->getBoardSizeX() - 2;
+                currentHead.x = mainGameMechsRef->getBoardSizeX() - 2;
             }
             break;
         case RIGHT:
-            playerPos.x++;
+            currentHead.x++;
 
-            if (playerPos.x >= mainGameMechsRef->getBoardSizeX()-1)
+            if (currentHead.x >= mainGameMechsRef->getBoardSizeX()-1)
             {
-                playerPos.x = 1;
+                currentHead.x = 1;
             }
-            break;    
+            break;   
+        //case IDLE; 
         default:
             break;
     }
+
+    // new current head should be inserted to the head of the list
+    playerPosList->insertHead(currentHead);
+
+    // then, remove tail
+    playerPosList->removeTail();
 
     myPrevDir = myDir;
 /*

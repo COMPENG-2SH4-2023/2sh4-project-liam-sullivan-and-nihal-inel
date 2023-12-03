@@ -42,13 +42,12 @@ class GameMechs
         int getScore();
 
         void setExitTrue();
-        // void setExitFalse();
         void setLoseFlag();        
         void setInput(char this_input);
         void clearInput();
         void incrementScore();
 
-        void generateFood(objPos blockOff);
+        void generateFood(objPos blockOff); // you need to upgrade this somehow...
         void getFoodPos(objPos &returnPos);
 };
 
