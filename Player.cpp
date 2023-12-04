@@ -22,6 +22,7 @@ Player::Player(GameMechs* thisGMRef)
     playerPosList->insertHead(tempPos);
     playerPosList->insertHead(tempPos);
 
+    // once food collision algorithm is implemented in food generation, do not leave the above 4 lines of code in there
 }
 
 
@@ -138,15 +139,39 @@ void Player::movePlayer()
     // new current head should be inserted to the head of the list
     playerPosList->insertHead(currentHead);
 
-    // then, remove tail
-    playerPosList->removeTail();
+    if (checkFoodConsumption() != true)
+    {
+        playerPosList->removeTail();
+    }
+    else
+    {
+        objPos head;
+        playerPosList->getHeadElement(head);
+        mainGameMechsRef->generateFood(head);
+    }
 
     myPrevDir = myDir;
-/*
-    if (myDir != IDLE)
-    {
-        moveCount++; // increase move count unless the player is not moving
-    }
-*/
 }
 
+bool Player::checkFoodConsumption()
+{
+    objPos foodPos;
+    mainGameMechsRef->getFoodPos(foodPos);
+
+    objPos headPos;
+    playerPosList->getHeadElement(headPos);
+
+    if (foodPos.x == headPos.x && foodPos.y == headPos.y)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+void Player::increasePlayerLength()
+{
+    
+}

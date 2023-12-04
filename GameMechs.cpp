@@ -95,7 +95,7 @@ void GameMechs::setInput(char this_input)
 
 void GameMechs::clearInput()
 {
-    input = 0; // ?? not sure about this
+    input = 0;
 }
 
 void GameMechs::incrementScore() // Specialized setter for the score field. 
@@ -125,7 +125,6 @@ void GameMechs::generateFood(objPos blockOff)
 
     objPos candidate(candidateX, candidateY, 'o');
 
-    //if (blockOff.x == candidateX && blockOff.y == candidateY)
     if (blockOff.isPosEqual(&candidate))
     {
         isValid = false;
@@ -137,7 +136,6 @@ void GameMechs::generateFood(objPos blockOff)
 
     if (isValid == true)
     {
-        // foodPos.setObjPos(candidateX, candidateY, 'o');
         foodPos.setObjPos(candidate);
     }
 }

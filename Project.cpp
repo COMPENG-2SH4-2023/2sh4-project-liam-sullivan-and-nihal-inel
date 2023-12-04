@@ -63,9 +63,7 @@ void Initialize(void)
 
     // temporarily keep this as a fix for the above commented out code:
     objPos tempPos(-1, -1, 'o');
-    myGameMechs->generateFood(tempPos);
-
-
+    myGameMechs->generateFood(tempPos); // once generateFood method is upgraded to accept objPosArrayList, we wont need tempPos, above line will be deleted
 }
 
 void GetInput(void)
